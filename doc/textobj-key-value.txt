@@ -1,0 +1,104 @@
+*textobj-keyvalue* is a Vim plugin to provide text objects to select general key and value of map.
+
+Version: 0.1.0
+Author : vimtaku <vimtaku@gmail.com>
+License: Creative Commons Attribution 2.1 Japan License
+         <http://creativecommons.org/licenses/by/2.1/jp/deed.en>
+
+==============================================================================
+INTRODUCTION			|textobj-keyvalue-introduction|
+INTERFACE			|textobj-keyvalue-interface|
+  KEY MAPPINGS			  |textobj-keyvalue-key-mappings|
+CUSTOMIZING			|textobj-keyvalue-customizing|
+CHANGELOG			|textobj-keyvalue-changelog|
+
+==============================================================================
+INTRODUCTION					*textobj-keyvalue-introduction*
+
+*textobj-keyvalue* is a Vim plugin to provide text objects to select a string
+that general key and value of map.
+For example, in javascript, you can define map easily as following.
+
+var map = {
+    'somekey' : 'somevalue',
+};
+
+If you use this plugin, you can select 'somekey' and 'somevalue' very easily.
+
+Requirements:
+- Vim 7.2 or later
+- |textobj-user| 0.3.8 or later
+  <http://www.vim.org/scripts/script.php?script_id=2100>
+
+Latest version:
+https://vimtaku@github.com/vimtaku/vim-textobj-keyvalue.git
+
+==============================================================================
+INTERFACE					*textobj-keyvalue-interface*
+
+------------------------------------------------------------------------------
+KEY MAPPINGS					*textobj-keyvalue-key-mappings*
+
+These key mappings are defined in Visual mode and Operator-pending mode.
+
+<Plug>(textobj-key-a){char}			*<Plug>(textobj-key-a)*
+            This mappings select key include quotes or double quotes.
+            Examples:
+            var map = {
+                'somekey' : 'somevalue',
+                  ^ here is cursor
+            };
+            then
+            var map = {
+                'somekey' : 'somevalue',
+                ~~~~~~~~~~
+                 ^ this range is selected.
+            };
+
+<Plug>(textobj-key-i){char}			*<Plug>(textobj-key-i)*
+            This mappings select inner text of the key surrounded by quotes or double quote.
+            Examples:
+            var map = {
+                'somekey' : 'somevalue',
+                  ^ here is cursor
+            };
+            then
+            var map = {
+                'somekey' : 'somevalue',
+                 ~~~~~~~~
+                 ^ this inner range is selected.
+            };
+
+
+==============================================================================
+CUSTOMIZING					*textobj-keyvalue-customizing*
+					    *g:textobj_key_no_default_key_mappings*
+					    *g:textobj_value_no_default_key_mappings*
+					    *:TextobjKeyDefaultKeyMappings*
+					    *:TextobjValueDefaultKeyMappings*
+This plugin will define the following key mappings in Visual mode and
+Operator-pending mode automatically.  If you don't want these key mappings,
+define |g:textobj_key_no_default_key_mappings|
+or |g:textobj_key_no_default_key_mappings| before this plugin is loaded
+(e.g. in your |vimrc|).  You can also use |:TextobjKeyDefaultKeyMappings|
+or |:TextobjValueDefaultKeyMappings|
+to redefine these key mappings.  This command doesn't override existing {lhs}s
+unless [!] is given.
+
+	{lhs}	{rhs}			~
+	-----	----------------------	~
+	ak	<Plug>(textobj-key-a)
+	ik	<Plug>(textobj-key-i)
+	av	<Plug>(textobj-value-a)
+	iv	<Plug>(textobj-value-i)
+
+
+==============================================================================
+CHANGELOG					*textobj-keyvalue-changelog*
+
+0.1.0	2012-04-14
+	- Initial version.
+
+==============================================================================
+vim:tw=78:fo=tcq2mM:ts=8:ft=help:norl
+

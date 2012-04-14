@@ -16,7 +16,7 @@ call textobj#user#plugin('key', {
 
 function! s:select_key_i()  "{{{2
     normal! 0
-    let splitter = ':'
+    let splitter = s:get_splitter()
     call search('["' . "'][^'" .'"'."]\\+" . '["' . "']" . "\\s*" . splitter)
     normal! l
     let c = getpos('.')
@@ -29,7 +29,7 @@ endfunction
 
 function! s:select_key_a()  "{{{2
     normal! 0
-    let splitter = ':'
+    let splitter = s:get_splitter()
     call search('\S\+\s*' . splitter)
     let c = getpos('.')
     let [b, e] = [c, c]
@@ -52,8 +52,8 @@ call textobj#user#plugin('value', {
 
 
 function! s:select_value_i()  "{{{2
-    normal! $
-    let splitter = ':'
+    normal! 0
+    let splitter = s:get_splitter()
     call search(splitter . "\\s*" . '["' . "'][^'" .'"'."]\\+" . '["' . "']", 'c')
     call search('["' . "']")
     normal! l
@@ -67,16 +67,38 @@ function! s:select_value_i()  "{{{2
 endfunction
 
 function! s:select_value_a()  "{{{2
-    normal! $
-    let splitter = ':'
-    call search(splitter, "bc")
-    call search(splitter . "\\s*" . '["' . "'][^'" .'"'."]\\+" . '["' . "']", 'c')
-    call search('["' . "']")
+    normal! 0
+    let splitter = s:get_splitter()
+    call search(splitter . "\s*", 'c')
+    execute('normal! ' . len(splitter) . 'l')
+    call search("\\S", '')
     let c = getpos('.')
     let [b, e] = [c, c]
     normal! $
-    call search('["' . "']", 'bc', line('.'))
+    call search("\S", 'bc', line('.'))
+    let cursorchar = getline('.')[col('.') - 1]
+    if (cursorchar =~ ',')
+        normal! h
+    endif
+
     let e = getpos('.')
   return ['v', b, e]
+endfunction
+
+let s:splitter_map = {
+\    'vim'        : ':',
+\    'javascript' : ':',
+\    'coffee'     : ':',
+\    'python'     : ':',
+\    'perl'       : '=>',
+\    'default'    : '='
+\}
+
+function! s:get_splitter()
+    let ft = &filetype
+    if has_key(s:splitter_map, ft)
+        return s:splitter_map[ft]
+    endif
+    return s:splitter_map['default']
 endfunction
 
