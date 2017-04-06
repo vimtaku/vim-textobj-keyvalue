@@ -88,6 +88,7 @@ endfunction
 let s:splitter_map = {
 \    'vim'        : ':',
 \    'javascript' : ':',
+\    'json'       : ':',
 \    'coffee'     : ':',
 \    'python'     : ':',
 \    'perl'       : '=>',
