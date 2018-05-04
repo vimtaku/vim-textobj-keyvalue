@@ -1,4 +1,4 @@
-*textobj-keyvalue* is a Vim plugin to provide text objects to select general key and value of map.
+textobj-keyvalue is a Vim plugin to provide text objects to select general key and value of map.
 
 Version: 0.1.0
 Author : vimtaku <vimtaku@gmail.com>
