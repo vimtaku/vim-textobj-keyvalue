@@ -15,11 +15,17 @@ call textobj#user#plugin('key', {
 \})
 
 function! s:select_key_i()  "{{{2
+    let save_pos = getpos(".")
     normal! 0
     let splitter = s:get_splitter()
     call search('["' . "'][^'" .'"'."]\\+" . '["' . "']" . "\\s*" . splitter)
     normal! l
     let c = getpos('.')
+    if abs(c[1] - save_pos[1]) > 2
+        call setpos('.', save_pos)
+        normal! l
+        return
+    endif
     let [b, e] = [c, c]
     call search('["' . "']" . "\\s*" . splitter)
     normal! h
@@ -28,10 +34,16 @@ function! s:select_key_i()  "{{{2
 endfunction
 
 function! s:select_key_a()  "{{{2
+    let save_pos = getpos(".")
     normal! 0
     let splitter = s:get_splitter()
     call search('\S\+\s*' . splitter)
     let c = getpos('.')
+    if abs(c[1] - save_pos[1]) > 2
+        call setpos('.', save_pos)
+        normal! l
+        return
+    endif
     let [b, e] = [c, c]
     call search('\S\s*' . splitter, '', line('.'))
     let e = getpos('.')
@@ -52,12 +64,18 @@ call textobj#user#plugin('value', {
 
 
 function! s:select_value_i()  "{{{2
+    let save_pos = getpos(".")
     normal! 0
     let splitter = s:get_splitter()
     call search(splitter . "\\s*" . '["' . "'][^'" .'"'."]\\+" . '["' . "']", 'c')
     call search('["' . "']")
     normal! l
     let c = getpos('.')
+    if abs(c[1] - save_pos[1]) > 2
+        call setpos('.', save_pos)
+        normal! l
+        return
+    endif
     let [b, e] = [c, c]
     normal! $
     call search('["' . "']", 'bc', line('.'))
@@ -67,12 +85,18 @@ function! s:select_value_i()  "{{{2
 endfunction
 
 function! s:select_value_a()  "{{{2
+    let save_pos = getpos(".")
     normal! 0
     let splitter = s:get_splitter()
     call search(splitter . "\s*", 'c')
     execute('normal! ' . len(splitter) . 'l')
     call search("\\S", '')
     let c = getpos('.')
+    if abs(c[1] - save_pos[1]) > 2
+        call setpos('.', save_pos)
+        normal! l
+        return
+    endif
     let [b, e] = [c, c]
     normal! $
     call search("\S", 'bc', line('.'))
